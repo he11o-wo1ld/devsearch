@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.contrib import messages
 
 from .models import Project, Tag
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .utils import *
 
 
@@ -20,8 +21,22 @@ def projects(request):
 
 def project(request, pk):
     projectObj = Project.objects.get(id=pk)
-    tags = projectObj.tags.all()
-    return render(request, 'project/single-project.html', {'project': projectObj})
+    form = ReviewForm()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = projectObj
+        review.owner = request.user.profile
+        review.save()
+
+        projectObj.getVoteCount
+        messages.success(request, "You'r review is successfully submited.!!")
+        return redirect('project', pk=projectObj.id)
+
+        # Update project votecount
+
+    return render(request, 'project/single-project.html', {'project': projectObj, 'form': form})
 
 @login_required(login_url="login")
 def createProject(request):
@@ -34,6 +49,7 @@ def createProject(request):
             project = form.save(commit=False)
             project.owner = profile
             project.save()
+
             messages.success(request, "Skill Has Been Created  Successfully.!")
             return redirect('account')
 

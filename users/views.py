@@ -34,6 +34,7 @@ def loginUser(request):
 
     return render(request, 'users/login_register.html')
 
+
 def logoutUser(request):
     logout(request)
     messages.info(request, 'User was logedout.!')
@@ -78,6 +79,7 @@ def userProfile(request, pk):
     context = {'profile': profile, 'topSkills': topSkills, 'otherSkills': otherSkills}
     return render(request, 'users/user_profile.html', context)
 
+
 @login_required(login_url='login')
 def userAccount(request):
     profile = request.user.profile
@@ -87,6 +89,7 @@ def userAccount(request):
 
     context = {'profile': profile, 'skills': skills, 'projects': projects}
     return render(request, 'users/account.html', context)
+
 
 @login_required(login_url='login')
 def editAccount(request):
@@ -102,6 +105,7 @@ def editAccount(request):
     context = {'form': form}
 
     return render(request, 'users/profile_form.html', context)
+
 
 @login_required(login_url='login')
 def createSkill(request):
@@ -121,6 +125,7 @@ def createSkill(request):
     context = {'form': form}
     return render(request, 'users/skill_form.html', context)
 
+
 @login_required(login_url='login')
 def updateSkill(request, pk):
     profile = request.user.profile
@@ -137,6 +142,7 @@ def updateSkill(request, pk):
 
     context = {'form': form}
     return render(request, 'users/skill_form.html', context)
+
 
 def deleteSkill(request, pk):
     profile = request.user.profile
